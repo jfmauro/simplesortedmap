@@ -20,15 +20,24 @@ public class SimpleSortedMapApplication {
         map.put(p2.getId(), p2);
         map.put(p3.getId(), p3);
 
+        List<Long> keys = new ArrayList<>(map.keySet());
 
-        Set<Map.Entry<Long, Person>> entries = map.entrySet();
+        Collections.sort(keys, new PersonByAgeComparator(map));
 
-        List<Map.Entry<Long, Person>> persons = new ArrayList<>(entries);
-        Collections.sort(persons, new PersonByAgeComparator());
-        for (Map.Entry<Long, Person> entry : persons) {
-            Person value = entry.getValue();
-            System.out.println(value.getName() + " " + value.getAge());
-        }
+        List<Person> persons = new ArrayList<>();
+
+        keys.stream()
+                .sorted(new PersonByAgeComparator(map))
+                .forEach(
+                    l -> {
+                        Person person = map.get(l);
+                        persons.add(person);
+                    }
+
+                );
+
+        persons.stream()
+                .forEach(p-> System.out.println(p.getName() + " " + p.getAge()));
 
 
     }
