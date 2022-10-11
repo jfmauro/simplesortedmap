@@ -6,6 +6,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @SpringBootApplication
 public class SimpleSortedMapApplication {
@@ -27,14 +29,18 @@ public class SimpleSortedMapApplication {
         List<Person> persons = new ArrayList<>();
 
         keys.stream()
-                .sorted(new PersonByAgeComparator(map))
-                .forEach(
+            .sorted(new PersonByAgeComparator(map))
+            .forEach(
                     l -> {
                         Person person = map.get(l);
                         persons.add(person);
                     }
 
                 );
+
+        ArrayList<Long> longs = keys.stream()
+                .sorted(new PersonByAgeComparator(map))
+                .collect(Collectors.toCollection(ArrayList::new));
 
         persons.stream()
                 .forEach(p-> System.out.println(p.getName() + " " + p.getAge()));
